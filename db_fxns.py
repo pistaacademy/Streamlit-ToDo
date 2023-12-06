@@ -13,3 +13,13 @@ def view_all_data():
     c.execute('SELECT * FROM taskstable')
     data = c.fetchall()
     return data
+
+def view_unique_task():
+    c.execute('SELECT DISTINCT task FROM taskstable')
+    data = c.fetchall()
+    return data
+
+def get_task(task):
+    c.execute('SELECT * FROM taskstable WHERE task="{}"'.format(task))
+    data = c.fetchall()
+    return data
