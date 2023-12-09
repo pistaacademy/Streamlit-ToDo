@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 
-from db_fxns import create_table, add_data, view_all_data,view_unique_task, get_task
+from db_fxns import create_table, add_data, view_all_data,view_unique_task, get_task, edit_task_data,delete_data
 
 def main():
     st.title("ToDo App with Streamlit")
@@ -67,13 +67,30 @@ def main():
                 new_task_status = st.selectbox(task_status, ["ToDo", "Doing", "Done"])
                 new_task_due_date = st.date_input(task_due_date)
             if st.button("Update Task"):
-                st.success("Successfully Updated Data:{}".format(task))
-
+                edit_task_data(new_task, new_task_status, new_task_due_date, task, task_status, task_due_date)
+                st.success("Successfully Updated:: {} To :: {}".format(task, new_task))
+            with st.expander("View Updated Data"):
+                result2 = view_all_data()
+                df2 = pd.DataFrame(result2, columns=['Task', 'Status', "Due Date"])
+                st.dataframe(df2)
 
 
 
     elif choice == "Delete":
         st.subheader("Delete Item")
+        with st.expander("View Data"):
+            result = view_all_data()
+            clean_df = pd.DataFrame(result, columns=["Task", "Status", "Date"])
+            st.dataframe(clean_df)
+        unique_list = [i[0] for i in view_unique_task()]
+        delete_by_task_name = st.selectbox("Select Task For Delete", unique_list)
+        if st.button("Delete"):
+            delete_data(delete_by_task_name)
+            st.warning("Deleted: '{}'".format(delete_by_task_name))
+        with st.expander("Updated Data"):
+            result = view_all_data()
+            clean_df = pd.DataFrame(result, columns=["Task", "Status", "Date"])
+            st.dataframe(clean_df)
     else:
         st.subheader("About")
 

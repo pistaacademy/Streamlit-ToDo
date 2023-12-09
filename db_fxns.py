@@ -23,3 +23,13 @@ def get_task(task):
     c.execute('SELECT * FROM taskstable WHERE task="{}"'.format(task))
     data = c.fetchall()
     return data
+
+def edit_task_data(new_task, new_task_status, new_task_due_date, task, task_status, task_due_date):
+    c.execute("UPDATE taskstable SET task =?, task_status=?, task_due_date=? WHERE task=? and task_status=? and task_due_date=? ",(new_task, new_task_status, new_task_due_date, task, task_status, task_due_date))
+    conn.commit()
+    data = c.fetchall()
+    return data
+
+def delete_data(task):
+    c.execute('DELETE FROM taskstable WHERE task="{}"'.format(task))
+    conn.commit()
